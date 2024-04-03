@@ -1,0 +1,82 @@
+$fn = 33;
+
+
+phi = (1+sqrt(5))/2;
+
+    
+module space() {
+    
+    radius = 1;
+    thickness = radius*(phi-1);
+    bevel = radius*(1 - (phi - 1)^3);
+    
+    vertices = [
+        [0, radius, 0],
+        [-radius*cos(30), -radius*sin(30), 0],
+        [radius*cos(30), -radius*sin(30), 0],
+    
+        [0, radius, thickness*(phi - 1)],
+        [-radius*cos(30), -radius*sin(30), thickness*(phi - 1)],
+        [radius*cos(30), -radius*sin(30), thickness*(phi - 1)],
+    
+    
+        [0, radius*bevel, thickness],
+        [-radius*bevel*cos(30), -radius*bevel*sin(30), thickness],
+        [radius*bevel*cos(30), -radius*bevel*sin(30), thickness]
+    
+    ];
+    
+    
+    difference() {
+        
+        hull() {
+            polyhedron( vertices , [[ each [ 0 : len(vertices) - 1 ] ] ] );
+        }
+        
+        cylinder(h =2*thickness*(phi-1), r = radius/6, center = true);
+        
+    }
+    
+    
+}
+
+
+module face() {
+    
+    space_radius = 1;
+    
+    union() {
+        
+        space();
+        
+        translate([0, 2*space_radius, 0]) rotate([0, 0, 180]) space();
+        translate([-2*space_radius*cos(30),-2*space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
+        translate([2*space_radius*cos(30),-2*space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
+        
+        translate([0, -space_radius, 0]) rotate([0, 0, 180]) space();
+        translate([space_radius*cos(30),space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
+        translate([-space_radius*cos(30),space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
+        
+        
+        translate([0, 3*space_radius, 0]) space();
+        translate([-3*space_radius*cos(30),-3*space_radius*sin(30), 0]) space();
+        translate([3*space_radius*cos(30),-3*space_radius*sin(30), 0]) space();
+        
+        
+        translate([-2*space_radius*cos(30),0, 0]) space();
+        translate([2*space_radius*cos(30),0, 0]) space();
+        
+        translate([-space_radius*cos(30), 3/2*space_radius, 0]) space();
+        translate([space_radius*cos(30), 3/2*space_radius, 0]) space();
+        
+        translate([-space_radius*cos(30), -3/2*space_radius, 0]) space();
+        translate([space_radius*cos(30), -3/2*space_radius, 0]) space();
+
+
+    }
+    
+}
+
+
+face();
+
