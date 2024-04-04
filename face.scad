@@ -33,50 +33,102 @@ module space() {
             polyhedron( vertices , [[ each [ 0 : len(vertices) - 1 ] ] ] );
         }
         
-        cylinder(h =2*thickness*(phi-1), r = radius/6, center = true);
+        cylinder(h =2*thickness*(phi-1), r = radius/12, center = true);
         
     }
     
     
 }
+
+module dihedral_bevel(space_radius, thickness, dihedral_angle) { 
+            
+            bevel = thickness*tan(dihedral_angle - 90);
+            
+            vertices = [
+                [0, 4*space_radius, 0],
+                [-4*space_radius*cos(30), -4*space_radius*sin(30), 0],
+        
+                [0, 4*space_radius - bevel, 0],
+                [-(4*space_radius - bevel)*cos(30), -(4*space_radius - bevel)*sin(30), 0],
+            
+                [0, 4*space_radius, thickness],
+                [-4*space_radius*cos(30), -4*space_radius*sin(30), thickness],
+    
+                [0, 4*space_radius, thickness],
+                [-4*space_radius*cos(30), -4*space_radius*sin(30), thickness],
+    
+                [-1, 4*space_radius + 1, 1]
+
+            ];
+        
+            hull() {
+                polyhedron( vertices , [[ each [ 0 : len(vertices) - 1 ] ] ] );
+            }
+        }
 
 
 module face() {
     
     space_radius = 1;
+    thickness = space_radius*(phi-1); 
     
-    union() {
-        
-        space();
-        
-        translate([0, 2*space_radius, 0]) rotate([0, 0, 180]) space();
-        translate([-2*space_radius*cos(30),-2*space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
-        translate([2*space_radius*cos(30),-2*space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
-        
-        translate([0, -space_radius, 0]) rotate([0, 0, 180]) space();
-        translate([space_radius*cos(30),space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
-        translate([-space_radius*cos(30),space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
+    dihedral_angle = 138.2;
+    
+    difference () {
+    
         
         
-        translate([0, 3*space_radius, 0]) space();
-        translate([-3*space_radius*cos(30),-3*space_radius*sin(30), 0]) space();
-        translate([3*space_radius*cos(30),-3*space_radius*sin(30), 0]) space();
         
         
-        translate([-2*space_radius*cos(30),0, 0]) space();
-        translate([2*space_radius*cos(30),0, 0]) space();
-        
-        translate([-space_radius*cos(30), 3/2*space_radius, 0]) space();
-        translate([space_radius*cos(30), 3/2*space_radius, 0]) space();
-        
-        translate([-space_radius*cos(30), -3/2*space_radius, 0]) space();
-        translate([space_radius*cos(30), -3/2*space_radius, 0]) space();
+        union() {
+            
+            space();
+            
+            translate([0, 2*space_radius, 0]) rotate([0, 0, 180]) space();
+            translate([-2*space_radius*cos(30),-2*space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
+            translate([2*space_radius*cos(30),-2*space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
+            
+            translate([0, -space_radius, 0]) rotate([0, 0, 180]) space();
+            translate([space_radius*cos(30),space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
+            translate([-space_radius*cos(30),space_radius*sin(30), 0]) rotate([0, 0, 180]) space();
+            
+            
+            translate([0, 3*space_radius, 0]) space();
+            translate([-3*space_radius*cos(30),-3*space_radius*sin(30), 0]) space();
+            translate([3*space_radius*cos(30),-3*space_radius*sin(30), 0]) space();
+            
+            
+            translate([-2*space_radius*cos(30),0, 0]) space();
+            translate([2*space_radius*cos(30),0, 0]) space();
+            
+            translate([-space_radius*cos(30), 3/2*space_radius, 0]) space();
+            translate([space_radius*cos(30), 3/2*space_radius, 0]) space();
+            
+            translate([-space_radius*cos(30), -3/2*space_radius, 0]) space();
+            translate([space_radius*cos(30), -3/2*space_radius, 0]) space();
 
 
+        }
+        
+        
+        
+        
+        
+        
+        
+        dihedral_bevel(space_radius, thickness, dihedral_angle);
+        rotate([0, 0, 120]) dihedral_bevel(space_radius, thickness, dihedral_angle);
+        rotate([0, 0, 240]) dihedral_bevel(space_radius, thickness, dihedral_angle);
+       
+        
+        
+    
     }
     
 }
 
 
-face();
+color([0.5,0.5,0.5,1]) face();
+
+
 
