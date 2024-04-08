@@ -46,7 +46,7 @@ module space(space_radius) {
 
 module dihedral_bevel(space_radius, thickness, dihedral_angle) { 
             
-            bevel = thickness*tan((180 - dihedral_angle)/2);
+            bevel = thickness*tan((180 - dihedral_angle)/2)/cos(60);
             
             vertices = [
                 [0, 4*space_radius, 0],
@@ -73,24 +73,23 @@ module dihedral_bevel(space_radius, thickness, dihedral_angle) {
 
 module dowel(space_radius, dihedral_angle) {
     
-    height = 1;
+    height = space_radius;
+    
+    translate([0, -(space_radius+2*space_radius*cos(30)), 0])
+        rotate([dihedral_angle-30, 0, 0])
+            translate([0, 0, -height])
+            cylinder(h = height, r = space_radius/12, center = true);
+    
+    translate([2*space_radius*cos(30), -(space_radius+2*space_radius*cos(30)), 0])
+        rotate([dihedral_angle-30, 0, 0])
+            translate([0, 0, -height])
+            cylinder(h = height, r = space_radius/12, center = true);
+    
+    translate([-2*space_radius*cos(30), -(space_radius+2*space_radius*cos(30)), 0])
+        rotate([dihedral_angle-30, 0, 0])
+            translate([0, 0, -height])
+            cylinder(h = height, r = space_radius/12, center = true);
 
-    rotate([0, 0, 30])
-        translate([space_radius+space_radius*cos(30), 0, 0])
-            rotate([0, dihedral_angle, 0])
-                cylinder(h = height, r = 1/12, center = true);
-    
-    rotate([0, 0, 30])
-        translate([4.25/2, 2*cos(30), 0])
-            rotate([0, dihedral_angle - 20, 0])
-                translate ([0, 0, -height])
-                    cylinder(h = height, r = 1/12, center = true);
-    
-    rotate([0, 0, 30])
-        translate([4.25/2, -2*cos(30), 0])
-            rotate([0, dihedral_angle - 20, 0])
-                translate ([0, 0, -height])
-                    cylinder(h = height, r = 1/12, center = true);
 
 
 
@@ -104,17 +103,17 @@ module face(space_radius, dihedral_angle) {
     thickness = space_radius*(phi-1); 
     
     
-    
-    translate ([0, -space_radius*cos(30)/2, -thickness]) 
-    
+ 
+    translate ([0, -space_radius*cos(30)/2, -thickness])
     
     difference() {
     
+        
         difference () {
         
             
             
-            
+             
             
             union() {
                 
@@ -161,17 +160,16 @@ module face(space_radius, dihedral_angle) {
         
         }
         
-        //dowel();
-        //rotate([0, 0, 120]) dowel();
-        //rotate([0, 0, 240]) dowel();
+        dowel(space_radius, dihedral_angle);
+        rotate([0, 0, 120]) dowel(space_radius, dihedral_angle);
+        rotate([0, 0, 240]) dowel(space_radius, dihedral_angle);
     
     }
     
 }
 
 
-color([0.5,0.5,0.5,0.3]) face(space_radius, dihedral_angle);
-//translate ([0, -cos(30)/2, -(phi-1)]) dowel(space_radius, dihedral_angle);
+color([0.5,0.5,0.5,0.3]) scale(15, 15, 15) face(space_radius, dihedral_angle);
 
 
 
