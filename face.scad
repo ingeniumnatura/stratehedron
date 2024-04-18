@@ -104,7 +104,7 @@ module face(space_radius, dihedral_angle) {
     
     
  
-    translate ([0, -space_radius*cos(30)/2, -thickness])
+    translate ([0, 0, -thickness])
     
     difference() {
     
@@ -169,7 +169,7 @@ module face(space_radius, dihedral_angle) {
 }
 
 
-color([0.5,0.5,0.5,0.3]) scale(15, 15, 15) face(space_radius, dihedral_angle);
+color([0.5,0.5,0.5,1]) scale(15, 15, 15) face(space_radius, dihedral_angle);
 
 
 

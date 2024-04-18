@@ -17,13 +17,13 @@ module private(radius) {
             
             {
                
-               cylinder(h = radius*(1/phi)^3, r = radius/phi, center = false);
-               translate([0, 0, radius*(1/phi)^3]) cylinder(h = radius*(1/phi)^2, r = radius/phi^2, center = false);
+               cylinder(h = radius*(1/phi)^3, r = radius/phi-radius*(1/phi)^4, center = false);
+               translate([0, 0, radius*(1/phi)^3]) cylinder(h = radius*(1/phi)^3, r = radius/phi^3, center = false);
             }
                
-            translate([0, 0, radius/phi]) cylinder(h = radius-(radius/phi^3), r1 = radius/phi^2, r2 = radius*(1/phi)^3,center = false);
+            translate([0, 0, radius/phi^2]) cylinder(h = radius+(radius/phi^3)/2, r1 = radius/phi^3, r2 = radius*(1/phi)^4,center = false);
             
-            translate([0, 0, radius*phi]) sphere(radius/phi^2);
+            translate([0, 0, radius*phi]) sphere(radius/phi^3);
                 
 
         }
@@ -126,18 +126,14 @@ module general(radius) {
 
 }
 
-
-scale([15, 15, 15]) color("green") face(1, 138.189651);
-
-scale([15, 15, 15]) color("blue") {
+module pieces(radius) {
     
     
-    translate([0, -cos(30)/2, 0]) {
+
         
-         general(radius = 1/2);
-    }
+    general(radius = 1/2);
+
     
-     translate([0, -cos(30)/2, 0]) {
         
         for (rotate_index = [1:3]) {
 
@@ -150,10 +146,9 @@ scale([15, 15, 15]) color("blue") {
                
          }
          
-    }
+
     
     
-    translate([0, -cos(30)/2, 0]) {
         
         for (rotate_index = [1:3]) {
 
@@ -164,10 +159,8 @@ scale([15, 15, 15]) color("blue") {
                
          }
          
-    }
-    
+
         
-    translate([0, -cos(30)/2, 0]) {
         
         for (rotate_index = [1:3]) {
 
@@ -178,7 +171,11 @@ scale([15, 15, 15]) color("blue") {
                
          }
          
-    }
     
 
- }
+}
+
+
+//scale([15, 15, 15]) color("green") face(1, 138.189651);
+
+scale([15, 15, 15]) color("blue") pieces(1);
