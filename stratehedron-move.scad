@@ -4,9 +4,9 @@ use <pieces.scad>
 
 $vpt = [0, 0, 0];
 
-$vpr = [30 ,30, 10];
+$vpr = [90 , 320, 15];
 
-$vpd = 60;
+$vpd = 35;
 
 
 
@@ -77,11 +77,10 @@ module stratehedron() {
         y = scale_factor*cartesian_coordinates[index][1];
         z = scale_factor*cartesian_coordinates[index][2];
         
-        r  = sqrt(x^2 + y^2 + z^2);
-        azimuth_angle = acos(z/r);
-        polar_angle = atan2(y,x);
+    r  = sqrt(x^2 + y^2 + z^2);
+    azimuth_angle = acos(z/r);
+    polar_angle = atan2(y,x);
         
-        echo([x, y, z], [r, theta, phi]);
         
         // Applying transformations
         
@@ -89,9 +88,7 @@ module stratehedron() {
         translate([x, y, z]) {
             rotate([0, 0, polar_angle]) {
                 rotate([0, azimuth_angle, 0]) {
-                    
-                    rotate([0, 0, z_axis_rotations[index]]) color("#008100") face(radius, dihedral_angle);
-                    
+                    rotate([0, 0, z_axis_rotations[index]]) color("#008100", alpha=1) face(radius, dihedral_angle);
                     if (index == 0) {color("#ff0000") rotate([0, 0, z_axis_rotations[index]]) pieces(1);}
                     
                     if (index == 5) {color("#0000ff") rotate([0, 0, z_axis_rotations[index]]) pieces(1);}
@@ -106,4 +103,34 @@ module stratehedron() {
 }
 
 
-rotate([0,-360*$t,-360*$t]) stratehedron();
+
+difference() {
+    
+    stratehedron();
+    
+
+    {
+    phi = (1+sqrt(5))/2;
+        
+    scale_factor = 3;
+    x = -scale_factor*(1/phi);
+    y = -scale_factor*(phi);
+    z = scale_factor*0;
+        
+    r  = sqrt(x^2 + y^2 + z^2);
+    azimuth_angle = acos(z/r);
+    polar_angle = atan2(y,x);
+        
+    translate([x, y, z]) {
+            rotate([0, 0, polar_angle]) {
+                rotate([0, azimuth_angle, 0]) {
+                   translate([-cos(30), 1.5, 0.1])cylinder(h=2, r=0.5, center = false);
+                    
+                }
+            }
+        }
+    } 
+  
+    
+    
+}
